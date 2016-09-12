@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+	<div id="app"></div>
+	</div>
+
+	<script id="template" type="text/ractive">
+		<h1 style= "color:{{color}}">
+			{{greeting}},I'm {{name}}!
+		</h1>
+		<button on-click="showAddress">
+			{{#if showAddress}}
+				Hide Address
+			{{else}}
+				Show Address
+			{{/if}}
+		</button>
+		{{#if showAddress}}
+		<ul>
+			{{#address}}
+			<li>{{street}}</li>
+			<li>{{city}}</li>
+			<li>{{state}}</li>
+			{{/address}}
+		</ul>
+		{{else}}
+			<p>Address hiden</p>
+		{{/if}}
+
+		<h3>Friends</h3>
+		<ul>
+		{{#friends}}
+			<li>{{name}} - {{age}}</li>
+		{{/friends}}
+		</ul>
+		<h3>Work History</h3>
+		<table class="table">
+			<tr>
+				<th>ID</th>
+				<th>Company</th>
+				<th>Job Title</th>
+				<th>Years</th>
+			</tr>
+		{{#each jobs:i}}
+			<tr>
+				<td>{{i}}</td>
+				<td>{{company}}</td>
+				<td>{{title}}</td>
+				<td>{{years}}</td>
+			</tr>
+		{{/each}}
+		</table>
+		<button on-click="addJob()">Add Job</button>
+	</script>
+
+	<script id="jobs" typs="text/ractive">
+		this is jobs component.
+	</script>
+
+	<script src='http://cdn.ractivejs.org/latest/ractive.js'></script>
+
+	<script>
+
+	// var Jobs = Ractive.extend({
+	// 	template:'#jobs',
+	// 	onInit = function(){
+
+	// 	}
+	// });
+
+
+	
+		var ractive = new Ractive({
+			el:"#app",
+			template:"#template",
+			addJob:function(){
+				ractive.push('jobs',{
+					company:'Test Company',
+					title:'Test title',
+					years:2
+				});
+			},
+			data:{
+				greeting:'Hello!',
+				name:'brad',
+				color:'green',
+				address:{
+					street:'street~',
+					city:'city~',
+					state:'state~'
+				},
+				friends:[{
+					name:'y',
+					age:'22'
+				},{
+					name:'z',
+					age:'21'
+				},{
+					name:'p',
+					age:'23'
+				}],
+				jobs:[
+					{
+						company:'compay1',
+						title:'title1',
+						years:'3'
+					},
+					{
+						company:'22222',
+						title:'t22222',
+						years:'3'
+					},
+					{
+						company:'lalalalal3',
+						title:'333',
+						years:'3'
+					},
+					{
+						company:'4~',
+						title:'title4~',
+						years:'3'
+					}
+				],
+				showAddress:false
+			}
+			});
+		ractive.on('showAddress',function(){
+			ractive.toggle('showAddress');
+		});
+
+	</script>
+
+
+</body>
+</html>
