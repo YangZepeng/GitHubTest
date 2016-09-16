@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-framework="ractive">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+  <body>
+
+    <h3>something</h3>
+    <div id="todoListEl"></div>
+    
+
+    <script src='http://cdn.ractivejs.org/latest/ractive.js'></script>
+   
+    <script id="template" type="text/ractive">
+      <div class='todo-app'>
+        <header>
+          <input
+            class='new-todo'
+            on-change='createTodo(event)'
+            placeholder='What needs to be done?'
+            autofocus
+          >
+        </header>
+
+        {{#if items.length}} <!-- only show when there are one or more items -->
+          <section class='main'>
+
+            <!-- 'toggle all' button -->
+            <div class='toggle-all-container'>
+              <label for='toggle-all'>Mark all as complete</label>
+              <input
+                name='toggle-all'
+                class='toggle toggle-all'
+                type='checkbox'
+                on-change='toggleAll(event)'
+                twoway='false'
+                checked='{{ items.length === completedTodos.length }}'
+              >
+            </div>
+
+            <!-- the actual list -->
+            <ul class='todo-list'>
+              {{#each items:i}}
+                {{#if filter(this)}}
+                  <li
+                    intro-outro='slide:fast'
+                    class='item {{ completed ? "completed" : "" }} {{ currentlyEditing === i ? "editing" : "" }}'
+                  >
+                    <div class='view'>
+                      <input class='toggle' type='checkbox' checked='{{completed}}'>
+                      <label on-dblclick='set("currentlyEditing",i)'>{{description}}</label>
+                      <button on-tap='splice("items", i, 1)' class='destroy'></button>
+                    </div>
+
+                    {{#if currentlyEditing === i}}
+                      <div class='edit-container'>
+                        <input
+                          decorator='select'
+                          class='edit'
+                          value='{{description}}'
+                          on-blur-change='submitEdit(event, i)'
+                        >
+                      </div>
+                    {{/if}}
+                  </li>
+                {{/if}}
+              {{/each}}
+            </ul>
+          </section>
+
+          <section class='footer' intro='fade' outro='slide'>
+            <span class='todo-count'>
+              <strong>{{ activeTodos.length }}</strong> {{ activeTodos.length === 1 ? 'item' : 'items' }} left
+            </span>
+
+            <!-- switch filters -->
+            <ul class='filters'>
+              <li
+                class='{{ currentFilter === "all" ? "selected" : "" }}'
+                on-tap='set("currentFilter","all")'
+              >All</li>
+
+              <li
+                class='{{ currentFilter === "active" ? "selected" : "" }}'
+                on-tap='set("currentFilter","active")'
+              >Active</li>
+
+              <li
+                class='{{ currentFilter === "completed" ? "selected" : "" }}'
+                on-tap='set("currentFilter","completed")'
+              >Completed</li>
+            </ul>
+
+            <!-- hidden if no completed items are left -->
+            {{#if completedTodos.length }}
+              <button class='clear-completed' on-tap='clearCompleted()'>
+                Clear completed ({{ completedTodos.length }})
+              </button>
+            {{/if}}
+          </section>
+        {{/if}}
+      </div>
+    </script>
+
+    
+
+
+     <script src='main.js'></script>
+  </body>
+</html>
