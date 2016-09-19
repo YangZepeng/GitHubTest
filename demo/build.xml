@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+
+<project name="Compress and Concatenate CSS and JS" default="initialize">
+    <property file="ant.properties" />
+
+    <target name="get_properties">
+        <property file="ant.properties" />
+        <echo>Imported Properties</echo>
+        <echo>css:${css_dir}</echo> 
+        <echo>js:${js_dir}</echo>
+    </target>
+
+    <target name="concat_css">
+        <echo>css_dir=${css_dir}</echo>     
+        <concat destfile="${assets_dir}/style.css">
+            <filelist id="files" dir="${css_dir}">
+                <file name="reset.css" /> 
+                <file name="grid.css" /> 
+                <file name="custom.css" /> 
+            </filelist>
+        </concat>
+    </target>
+
+    <target name="compress_css" depends="concat_css">
+        <antcall target="compress">
+            <param name="file" value="${assets_dir}/style.css" />
+        </antcall>
+    </target>
+
+    <target name="concat_js">
+        <concat destfile="${assets_dir}/script.js">
+            <filelist id="files" dir="${js_dir}">
+                <file name="jquery-latest.js" /> 
+                <file name="tokens.js" /> 
+                <file name="parse.js" /> 
+            </filelist>
+        </concat>
+    </target>
+
+    <target name="compress_js" depends="concat_js">
+        <antcall target="compress">
+            <param name="file" value="${assets_dir}/script.js" />
+        </antcall>
+    </target>
+
+    <target name="compress">
+        <java jar="/Users/andrew/bin/yui.jar" fork="true">
+            <arg value="${file}" />
+            <arg value="-o" />
+            <arg value="${file}" />
+        </java>
+        <echo>${file}</echo> 
+    </target>
+
+    <target name="upload_files" depends="initialize">
+        <ftp server="treasuredtruth.ca"
+             userid="treasuredtruth_ca_admin"
+             password="IB7ISDZKFQ"
+             port="21"
+             remotedir="/public_html"
+             passive="yes"
+             binary="no">
+            <fileset dir=".">
+                <include name="assets/*"   />
+                <include name="index.html" />
+            </fileset>
+        </ftp>
+    </target>
+
+    <target name="initialize" depends="get_properties,clean_up">
+        <mkdir dir="${assets_dir}" />
+        <antcall target="compress_css" />
+        <antcall target="compress_js"  />
+        <echo>Done!</echo>
+    </target>
+
+    <target name="clean_up" depends="get_properties">
+        <delete dir="${assets_dir}" />
+    </target>
+
+</project>

@@ -1,0 +1,20 @@
+body {
+    font: 15px/1.5 helvetia, arial, san-serif;
+}
+
+div {
+    width: 960px;
+    margin:auto;
+}
+h1 {
+    font-size: 190%;
+    margin: 20px auto;
+}
+p {
+    margin: 20px 0;
+}
+
+li {
+    margin: 0 0 15px 30px;
+    list-style-type: circle;
+}
