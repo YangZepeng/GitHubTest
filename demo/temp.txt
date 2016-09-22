@@ -1,8 +1,0 @@
-
-<ftp server="treasuredtruth.ca",
- port="21",
- remotedir="/public_html",
- userid="treasuredtruth_ca_admin",
- password="IB7ISDZKFQ",
- passive="yes",
- binary="no">

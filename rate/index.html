@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rate</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div id="rel"></div>
+
+	<!-- template -->
+	<script id="RateT" type="text/ractive">
+	<p class='current-rating'>current rating: <strong>{{rating}}</strong></p>
+	<div class='ratings'>
+		<div class='rating {{readonly ? "readonly" : ""}}' on-mouseout='highlight:{{0}}'>
+		  	{{#stars():i}}
+			    <span class='star {{ rating > i ? "selected" : "" }} {{ hightlighted > i ? "highlighted" : "" }}'
+			          on-mouseover='highlight:{{i+1}}'
+			          on-click="select:{{i+1}}"
+			    >&#9733;</span>
+		  	{{/stars()}}
+		</div>
+	</div>
+	</script>
+
+	<!-- template2 -->
+	<script id="template" type="text/ractive">
+		<h3>here is in the template</h3>
+		<h3>no read only</h3>
+		<rating max = '10'></rating>
+		 <button on-click="highlight:10">button</button>
+		<h3>readonly</h3>
+		<rating max = '11' readonly></rating>
+	</script>
+
+	<script src="node_modules/ractive/build/Ractive.js"></script>
+	<script src="js/app.js"></script>
+
+</body>
+</html>
